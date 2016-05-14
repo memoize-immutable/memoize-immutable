@@ -2,6 +2,10 @@
  * Ideal with Redux and other immutable environments.
  */
 
+if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
+  throw new Error('This lib requires an implementation of WeakMap and Map');
+}
+
 if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
   var define = function (factory) {
     factory(require, exports, module);
@@ -9,10 +13,6 @@ if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeo
 }
 
 define(function (require, exports, module) {
-
-  if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
-    throw new Error('This lib requires an implementation of WeakMap and Map');
-  }
 
   var _idMap = new WeakMap();
   var _id = { id: 0 };

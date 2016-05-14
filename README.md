@@ -2,6 +2,8 @@
 
 An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
+Dependency free! But requires global `WeakMap` and `Map` constructors.
+
 ## How is it different from other memoizers?
 
 In order to index cached results, most memoizers serialize arguments using `JSON.stringify` or similar methods.
@@ -10,14 +12,15 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
 
 ## Install
 
-  npm install --save memoize-immutable
+    npm install --save memoize-immutable
 
 ## API
 
-  `memoize( fn [, limit ] )`
+    `memoize( fn [, limit ] )`
 
 - `fn`: the function to memoize
 - `limit`: the maximum size of the cache (optional, defaults to 10000)
+
 returns a memoized function
 
 ## Usage
