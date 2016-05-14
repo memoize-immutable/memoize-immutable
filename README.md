@@ -1,17 +1,24 @@
 # Memoize Immutable
 
-An efficient function memoizer that uses strict-equality for argument comparison. Ideal with Redux and other immutable environments.
+An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
-## How is it different from other memoizers?
+## How is it different from other memoizers?
 
-This memoizer compares arguments by strict-equality,
-which means non-primitive arguments (such as objects) are compared by reference.
-Most memoizers out-there compare arguments by deep-equality, which requires serializing all arguments,
-and is very inefficient when working with Redux and other immutable environments.
+In order to index cached results, most memoizers serialize arguments using `JSON.stringify` or similar methods.
+When working with immutable data, serializing the reference of non-primitive arguments is sufficient and much more efficient.
+This memoizer uses a WeakMap and an auto-incrementing id to materialize the reference of non-primitive arguments.
 
 ## Install
 
   npm install --save memoize-immutable
+
+## API
+
+  `memoize( fn [, limit ] )`
+
+- `fn`: the function to memoize
+- `limit`: the maximum size of the cache (optional, defaults to 10000)
+returns a memoized function
 
 ## Usage
 

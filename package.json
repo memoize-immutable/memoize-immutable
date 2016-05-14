@@ -1,7 +1,7 @@
 {
   "name": "memoize-immutable",
   "version": "1.0.0",
-  "description": "A function memoizer that compares arguments by reference. Ideal with Redux and other immutable environments.",
+  "description": "An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.",
   "main": "index.js",
   "scripts": {
     "test": "mocha test.js"
