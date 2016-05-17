@@ -1,4 +1,4 @@
-# Memoize Immutable
+# Memoize Immutable [![npm version](https://badge.fury.io/js/memoize-immutable.svg)](https://badge.fury.io/js/memoize-immutable)
 
 An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
@@ -16,12 +16,18 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
 
 ## API
 
-    `memoize( fn [, limit ] )`
+    memoize( fn [, cache ] )
 
 - `fn`: the function to memoize
-- `limit`: the maximum size of the cache (optional, defaults to 10000)
+- `cache`: a cache instance implementing `.has`, `.get` and `.set` methods (optional, defaults to a native Map)
 
 returns a memoized function
+
+### Limiting the size of the cache
+
+There are many strategies to limit the size of the cache.
+You can use a simple LRU cache [such as this one](https://gist.github.com/louisremi/ed1f8357642be8ecc4a88a78e4fd9870),
+or even clear the cache completely every X minutes.
 
 ## Usage
 

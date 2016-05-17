@@ -1,5 +1,5 @@
-/* A function memoizer that compares arguments by reference.
- * Ideal with Redux and other immutable environments.
+/* An efficient memoizer for functions that only receive immutable arguments.
+ * Ideal with Redux and similar environments.
  */
 
 if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
@@ -16,16 +16,10 @@ define(function (require, exports, module) {
 
   var _idMap = new WeakMap();
   var _id = { id: 0 };
-  // the last four arguments help with testing
-  module.exports = function memoize(fn, limit, cache1, cache2, idMap, id) {
-    if ( !limit ) {
-      limit = 10000;
-    }
-    if ( !cache1 ) {
-      cache1 = new Map();
-    }
-    if ( !cache2 ) {
-      cache2 = new Map();
+  // the last three arguments help with testing
+  module.exports = function memoize(fn, cache, idMap, id) {
+    if ( !cache ) {
+      cache = new Map();
     }
     if ( !idMap ) {
       idMap = _idMap;
@@ -40,6 +34,7 @@ define(function (require, exports, module) {
         var argType = typeof arguments[i];
 
         // if the argument is not a primitive, get a unique (memoized?) id for it
+        // TODO: check if using symbols here would be faster than serializing a primitive
         if (
           // typeof null is "object", although we'll consider it as a primitive
           arguments[i] !== null &&
@@ -61,24 +56,13 @@ define(function (require, exports, module) {
 
       var sKey = aKey.join('_///_');
 
-      if ( !cache1.has(sKey) ) {
+      if ( !cache.has(sKey) ) {
         var result = fn.apply(this, arguments);
-        cache1.set( sKey, result );
-        // before the cache reaches it's max size, start filling a new cache
-        if ( cache1.size > limit * 0.9 ) {
-          cache2.set( sKey, result );
-        }
-        // when the cache reaches its maximum size, swap it with the newest and
-        // clear it
-        if ( cache1.size > limit ) {
-          var tmp = cache1;
-          cache1 = cache2;
-          cache2 = tmp;
-          cache2.clear();
-        }
+        cache.set( sKey, result );
+        return result;
       }
 
-      return cache1.get( sKey );
+      return cache.get( sKey );
     };
   };
 });
