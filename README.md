@@ -23,7 +23,7 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
 
 returns a memoized function
 
-### Limiting the size of the cache
+#### Limiting the size of the cache
 
 There are many strategies to limit the size of the cache.
 You can use a simple LRU cache [such as this one](https://gist.github.com/louisremi/ed1f8357642be8ecc4a88a78e4fd9870),

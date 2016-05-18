@@ -16,7 +16,7 @@ define(function (require, exports, module) {
 
   var _idMap = new WeakMap();
   var _id = { id: 0 };
-  // the last three arguments help with testing
+  // the last two arguments help with testing
   module.exports = function memoize(fn, cache, idMap, id) {
     if ( !cache ) {
       cache = new Map();
@@ -34,7 +34,6 @@ define(function (require, exports, module) {
         var argType = typeof arguments[i];
 
         // if the argument is not a primitive, get a unique (memoized?) id for it
-        // TODO: check if using symbols here would be faster than serializing a primitive
         if (
           // typeof null is "object", although we'll consider it as a primitive
           arguments[i] !== null &&
