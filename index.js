@@ -27,10 +27,15 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
   // exported for tests
   memoize.__call__ = memoizedCall;
 
+  // Export shortcut to "unoptimized" version
+  memoize.unoptimized = function memoizedUnoptimized (fn, cache, idMap, id) {
+    return memoize(fn, cache, idMap, id, true);
+  };
+
   return memoize;
 
   // the last two arguments help with testing
-  function memoize(fn, cache, idMap, id) {
+  function memoize(fn, cache, idMap, id, unoptimized) {
     if ( !cache ) {
       cache = new Map();
     }
@@ -41,9 +46,28 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       id = _id;
     }
 
-    return function(/* ...args */) {
-      return memoizedCall(fn, cache, idMap, id, arguments);
-    };
+    if (unoptimized) {
+      // Allow dynamic list of arguments, but lose V8 optimizations
+      return function(/* ...args */) {
+        return memoizedCall(fn, cache, idMap, id, arguments);
+      };
+    } else {
+      // Fixed number of arguments, based on fn's signature
+      let args = '';
+      for (let i = 0; i < fn.length; i++) {
+        args += 'a' + i;
+        if (i < fn.length - 1) {
+          args += ',';
+        }
+      }
+      const builder = new Function(
+        'call,fn,cache,idMap,id',
+        'return function ' + fn.name + ' (' + args + ') {' +
+          'return call(fn, cache, idMap, id, [' + args + ']);' +
+        '}'
+      );
+      return builder(memoizedCall, fn, cache, idMap, id);
+    }
   }
 
   function memoizedCall (fn, cache, idMap, id, args) {
