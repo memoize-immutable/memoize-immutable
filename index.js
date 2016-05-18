@@ -24,8 +24,13 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
   var _idMap = new WeakMap();
   var _id = { id: 0 };
 
+  // exported for tests
+  memoize.__call__ = memoizedCall;
+
+  return memoize;
+
   // the last two arguments help with testing
-  return function memoize(fn, cache, idMap, id) {
+  function memoize(fn, cache, idMap, id) {
     if ( !cache ) {
       cache = new Map();
     }
@@ -39,7 +44,7 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
     return function(/* ...args */) {
       return memoizedCall(fn, cache, idMap, id, arguments);
     };
-  };
+  }
 
   function memoizedCall (fn, cache, idMap, id, args) {
     var aKey = [];
