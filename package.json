@@ -19,5 +19,12 @@
     "eslint-plugin-mocha": "^2.2.0",
     "mocha": "^2.4.5",
     "mocha-phantomjs": "^4.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/louisremi/memoize-immutable.git"
+  },
+  "bugs": {
+    "url": "https://github.com/louisremi/memoize-immutable/issues"
   }
 }

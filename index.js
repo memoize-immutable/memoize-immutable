@@ -6,18 +6,25 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
   throw new Error('This lib requires an implementation of WeakMap and Map');
 }
 
-if (typeof exports === 'object' && typeof exports.nodeName !== 'string' && typeof define !== 'function') {
-  var define = function (factory) {
-    factory(require, exports, module);
-  };
-}
-
-define(function (require, exports, module) {
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define([], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    // Browser globals (root is window)
+    root.returnExports = factory();
+  }
+}(this, function () {
 
   var _idMap = new WeakMap();
   var _id = { id: 0 };
   // the last two arguments help with testing
-  module.exports = function memoize(fn, cache, idMap, id) {
+  return function memoize(fn, cache, idMap, id) {
     if ( !cache ) {
       cache = new Map();
     }
@@ -64,4 +71,5 @@ define(function (require, exports, module) {
       return cache.get( sKey );
     };
   };
-});
+
+}));
