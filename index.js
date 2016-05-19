@@ -20,6 +20,7 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
     root.returnExports = factory();
   }
 }(this, function() {
+  'use strict';
 
   // non-primitive arguments will be made serializable by assigning them
   // a unique auto-incrementing identifier
@@ -36,7 +37,7 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       new Map()
     );
 
-    // The following three options only help with testing
+    // The following two options only help with testing
     var idMap = options && options._idMap || _idMap;
     var id = options && options._id || _id;
 
