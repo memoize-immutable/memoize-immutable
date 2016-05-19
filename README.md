@@ -24,11 +24,13 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
 - `options` (optionnal):
   - `cache`: a cache instance implementing `.has`, `.get` and `.set` methods (defaults to a native Map)
   - `useNamedArgs`: set this to `true` when the memoized function only receives named arguments wrapped in a single object,
-    instead of a list of arguments (**using named arguments allows V8 to optimize the memoized function**),
+    instead of a list of arguments,
   - `useOneObjArg`: set this to `true` when the memoized function only receives one non-primitive argument
     (uses a single WeakMap for efficient caching).
 
 returns a memoized function
+
+**Performance tip**: adapting your code to enable `useNamedArgs` or `useOneObjArg` options allows V8 to optimize the memoized function.
 
 #### Limiting the size of the cache
 
