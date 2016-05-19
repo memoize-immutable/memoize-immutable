@@ -1,4 +1,4 @@
-# Memoize Immutable [![npm version](https://badge.fury.io/js/memoize-immutable.svg)](https://badge.fury.io/js/memoize-immutable)
+# Memoize Immutable [![npm version](https://badge.fury.io/js/memoize-immutable.svg)](https://badge.fury.io/js/memoize-immutable) [![Build Status](https://travis-ci.org/louisremi/memoize-immutable.svg?branch=master)](https://travis-ci.org/louisremi/memoize-immutable) [![Dependency Status](https://david-dm.org/louisremi/memoize-immutable.svg)](https://david-dm.org/louisremi/memoize-immutable)
 
 An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
