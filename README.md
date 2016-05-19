@@ -35,7 +35,7 @@ returns a memoized function
 #### Limiting the size of the cache
 
 There are many strategies to limit the size of the cache.
-You can use a simple LRU cache [such as this one](https://gist.github.com/louisremi/ed1f8357642be8ecc4a88a78e4fd9870),
+You can pass a simple LRU cache [such as this one](https://gist.github.com/louisremi/ed1f8357642be8ecc4a88a78e4fd9870) with `options.cache`,
 or even clear the cache completely every X minutes.
 
 ## Usage
