@@ -2,7 +2,9 @@
 
 An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
-Dependency free! But requires global `WeakMap` and `Map` constructors.
+Dependency free! But requires global `WeakMap` and `Map` constructors
+(which have [good browser support](https://kangax.github.io/compat-table/es6/#test-Map)
+and [decent polyfills](https://github.com/WebReflection/es6-collections)).
 
 ## How is it different from other memoizers?
 
@@ -16,10 +18,15 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
 
 ## API
 
-    memoize( fn [, cache ] )
+    memoize( fn [, options ] )
 
 - `fn`: the function to memoize
-- `cache`: a cache instance implementing `.has`, `.get` and `.set` methods (optional, defaults to a native Map)
+- `options` (optionnal):
+  - `cache`: a cache instance implementing `.has`, `.get` and `.set` methods (defaults to a native Map)
+  - `useNamedArgs`: set this to `true` when the memoized function only receives named arguments wrapped in a single object,
+    instead of a list of arguments (**using named arguments allows V8 to optimize the memoized function**),
+  - `useOneObjArg`: set this to `true` when the memoized function only receives one non-primitive argument
+    (uses a single WeakMap for efficient caching).
 
 returns a memoized function
 

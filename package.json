@@ -3,8 +3,9 @@
   "version": "1.1.1",
   "description": "An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.",
   "main": "index.js",
+  "engines" : { "node" : ">=4.4.4" },
   "scripts": {
-    "test": "mocha test.js"
+    "test": "mocha test.js && node --allow-natives-syntax test-is-optimized.js"
   },
   "keywords": [
     "immutable",
@@ -15,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chalk": "^1.1.3",
     "eslint": "^2.9.0",
     "eslint-plugin-mocha": "^2.2.0",
     "mocha": "^2.4.5",

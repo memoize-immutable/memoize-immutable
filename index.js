@@ -19,48 +19,117 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
     // Browser globals (root is window)
     root.returnExports = factory();
   }
-}(this, function () {
+}(this, function() {
 
+  // non-primitive arguments will be made serializable by assigning them
+  // a unique auto-incrementing identifier
   var _idMap = new WeakMap();
   var _id = { id: 0 };
-  // the last two arguments help with testing
-  return function memoize(fn, cache, idMap, id) {
-    if ( !cache ) {
-      cache = new Map();
-    }
-    if ( !idMap ) {
-      idMap = _idMap;
-    }
-    if ( !id ) {
-      id = _id;
+
+  return function memoize(fn, options) {
+    var useOneObjArg = options && !!options.useOneObjArg;
+    var useNamedArgs = options && !!options.useNamedArgs;
+    var cache = options && options.cache || ( useOneObjArg ?
+      // When using a single non-primitive argument, results will be cached
+      // in a simple WeakMap
+      new WeakMap() :
+      new Map()
+    );
+
+    // The following three options only help with testing
+    var idMap = options && options._idMap || _idMap;
+    var id = options && options._id || _id;
+
+    // fast path for single non-primitive arguments
+    if ( useOneObjArg ) {
+      return function(args) {
+        if ( !cache.has(args) ) {
+          var result = fn.call(this, args);
+          cache.set( args, result );
+          return result;
+        }
+        return cache.get(args);
+      }
     }
 
+    // useNamedArgs path doesn't access the arguments object, which allows v8
+    // to optimize it
+    if ( useNamedArgs ) {
+      return function(args) {
+        // when using named args, they need to be sorted alphabetically to
+        // make sure we build the cache key the same way every time.
+        var argNames = Object.keys(args).sort();
+        var length = argNames.length;
+        var aKey = [];
+        for ( var i = 0; i < length; i++ ) {
+          var arg = args[argNames[i]];
+          var argType = typeof arg;
+
+          // if the argument is not a primitive, get a unique (memoized?) id for it
+          if (
+            // typeof null is "object", although we'll consider it as a primitive
+            arg !== null &&
+            ( argType === 'object' || argType === 'function' || argType === 'symbol' )
+          ) {
+            if ( !idMap.has(arg) ) {
+              idMap.set(arg, id.id++);
+            }
+            aKey.push( argNames[i] + ':' + idMap.get(arg) );
+
+          // otherwise, add the argument and its type to the aKey
+          } else {
+            aKey.push( argNames[i] + ':' + ( arg == null ?
+              '' + arg :
+              argType + '(' + arg + ')'
+            ));
+          }
+        }
+
+        // concatenate serialized arguments using a complex separator
+        // (to avoid key collisions)
+        var sKey = aKey.join('/-/[MI_SEP]/-/');
+
+        if ( !cache.has(sKey) ) {
+          var result = fn.call(this, args);
+          cache.set( sKey, result );
+          return result;
+        }
+
+        return cache.get( sKey );
+      };
+    }
+
+    // default path
     return function() {
+      var length = arguments.length;
       var aKey = [];
-      for ( var i = 0; i < arguments.length; i++ ) {
-        var argType = typeof arguments[i];
+      for ( var i = 0; i < length; i++ ) {
+        var arg = arguments[i];
+        var argType = typeof arg;
 
         // if the argument is not a primitive, get a unique (memoized?) id for it
         if (
           // typeof null is "object", although we'll consider it as a primitive
-          arguments[i] !== null &&
+          arg !== null &&
           ( argType === 'object' || argType === 'function' || argType === 'symbol' )
         ) {
-          if ( !idMap.has(arguments[i]) ) {
-            idMap.set(arguments[i], id.id++);
+          if ( !idMap.has(arg) ) {
+            idMap.set(arg, id.id++);
           }
-          aKey.push( idMap.get(arguments[i]) );
+          aKey.push( idMap.get(arg) );
 
         // otherwise, add the argument and its type to the aKey
         } else {
-          aKey.push( arguments[i] == null ?
-            '' + arguments[i] :
-            argType + '(' + arguments[i] + ')'
+          aKey.push( arg == null ?
+            '' + arg :
+            argType + '(' + arg + ')'
           );
         }
       }
 
-      var sKey = aKey.join('_///_');
+      // concatenate serialized arguments using a complex separator
+      // (to avoid key collisions)
+      var sKey = aKey.join('/-/[MI_SEP]/-/');
 
       if ( !cache.has(sKey) ) {
         var result = fn.apply(this, arguments);
@@ -71,5 +140,4 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       return cache.get( sKey );
     };
   };
-
 }));
