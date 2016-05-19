@@ -1,9 +1,11 @@
 {
   "name": "memoize-immutable",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.",
   "main": "index.js",
-  "engines" : { "node" : ">=4.4.4" },
+  "engines": {
+    "node": ">=4.4.4"
+  },
   "scripts": {
     "test": "mocha test.js && node --allow-natives-syntax test-is-optimized.js"
   },
