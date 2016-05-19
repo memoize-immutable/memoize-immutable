@@ -134,7 +134,7 @@ describe('memoize', function() {
     expect(memoizedFn(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)).to.equal(1);
     expect(nbExecs).to.equal(1);
     expect(cache.size).to.equal(1);
-    expect(cache.get('0/-/[MI_SEP]/-/string(string)/-/[MI_SEP]/-/1/-/[MI_SEP]/-/2/-/[MI_SEP]/-/number(12)/-/[MI_SEP]/-/null/-/[MI_SEP]/-/boolean(false)/-/[MI_SEP]/-/undefined'))
+    expect(cache.get('0/<[MI_SEP]>/string(string)/<[MI_SEP]>/1/<[MI_SEP]>/2/<[MI_SEP]>/number(12)/<[MI_SEP]>/null/<[MI_SEP]>/boolean(false)/<[MI_SEP]>/undefined'))
       .to.equal(1);
     expect(idMap.size).to.equal(3);
 
@@ -142,7 +142,7 @@ describe('memoize', function() {
     expect(memoizedFn(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)).to.equal(1);
     expect(nbExecs).to.equal(1);
     expect(cache.size).to.equal(1);
-    expect(cache.get('0/-/[MI_SEP]/-/string(string)/-/[MI_SEP]/-/1/-/[MI_SEP]/-/2/-/[MI_SEP]/-/number(12)/-/[MI_SEP]/-/null/-/[MI_SEP]/-/boolean(false)/-/[MI_SEP]/-/undefined'))
+    expect(cache.get('0/<[MI_SEP]>/string(string)/<[MI_SEP]>/1/<[MI_SEP]>/2/<[MI_SEP]>/number(12)/<[MI_SEP]>/null/<[MI_SEP]>/boolean(false)/<[MI_SEP]>/undefined'))
       .to.equal(1);
     expect(idMap.size).to.equal(3);
 

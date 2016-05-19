@@ -87,7 +87,7 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
 
         // concatenate serialized arguments using a complex separator
         // (to avoid key collisions)
-        var sKey = aKey.join('/-/[MI_SEP]/-/');
+        var sKey = aKey.join('/<[MI_SEP]>/');
 
         if ( !cache.has(sKey) ) {
           var result = fn.call(this, args);
@@ -129,7 +129,7 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
 
       // concatenate serialized arguments using a complex separator
       // (to avoid key collisions)
-      var sKey = aKey.join('/-/[MI_SEP]/-/');
+      var sKey = aKey.join('/<[MI_SEP]>/');
 
       if ( !cache.has(sKey) ) {
         var result = fn.apply(this, arguments);
