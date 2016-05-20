@@ -11,6 +11,7 @@ and [decent polyfills](https://github.com/WebReflection/es6-collections)).
 In order to index cached results, most memoizers serialize arguments using `JSON.stringify` or similar methods.
 When working with immutable data, serializing the reference of non-primitive arguments is sufficient and much more efficient.
 This memoizer uses a WeakMap and an auto-incrementing id to materialize the reference of non-primitive arguments.
+Read [the blog post](https://blog.prototypo.io/memoize-immutable-efficient-memoizer-for-redux-and-other-immutable-environments-59277fefa45f) to learn more about the advantages of this module.
 
 ## Install
 
