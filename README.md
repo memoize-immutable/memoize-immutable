@@ -30,9 +30,11 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
   - `displayNameSuffix`: the display name of the returned function will be set to
     the name of the original function + this suffix (defaults to `'Memoized'`).
 
-returns a memoized function
+`return`s a memoized function.
 
-**Performance tip**: adapting your code to enable `useNamedArgs` or `useOneObjArg` options allows V8 to optimize the memoized function.
+#### Performance tip
+
+Adapting your code to enable `useNamedArgs` or `useOneObjArg` options allows V8 to optimize the original function.
 
 #### Limiting the size of the cache
 
@@ -76,7 +78,7 @@ expect(nbExecs).to.equal(2);
 
 ## license
 
-MIT
+[MIT](http://louisremi.mit-license.org/)
 
 ## Authors
 
