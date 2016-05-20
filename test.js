@@ -249,4 +249,17 @@ describe('memoize', function() {
 
     done();
   });
+
+  it('should set the displayName of the memoized function', function(done) {
+    var sum = function sum() {};
+
+    expect(memoize(sum).displayName)
+      .to.equal('sumMemoized');
+    expect(memoize(sum, {displayNameSuffix: 'Zob'}).displayName)
+      .to.equal('sumZob');
+    expect(memoize(sum, {displayNameSuffix: ''}).displayName)
+      .to.equal('sum');
+
+    done();
+  });
 });

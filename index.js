@@ -36,7 +36,9 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       new WeakMap() :
       new Map()
     );
-    var displayNameSuffix = options && options.displayNameSuffix || 'Memoized';
+    var displayNameSuffix = options && 'displayNameSuffix' in options ?
+      options.displayNameSuffix :
+      'Memoized';
 
     // The following two options only help with testing
     var idMap = options && options._idMap || _idMap;
@@ -146,7 +148,11 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       };
     }
 
-    memoized.displayName = fn.name + displayNameSuffix;
+    // Give a meaningful displayName to the memoized function
+    if ( fn.name ) {
+      memoized.displayName = fn.name + displayNameSuffix;
+    }
+
     return memoized;
   };
 }));
