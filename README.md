@@ -26,7 +26,9 @@ This memoizer uses a WeakMap and an auto-incrementing id to materialize the refe
   - `useNamedArgs`: set this to `true` when the memoized function only receives named arguments wrapped in a single object,
     instead of a list of arguments,
   - `useOneObjArg`: set this to `true` when the memoized function only receives one non-primitive argument
-    (uses a single WeakMap for efficient caching).
+    (uses a single WeakMap for efficient caching),
+  - `displayNameSuffix`: the display name of the returned function will be set to
+    the name of the original function + this suffix (defaults to `'Memoized'`).
 
 returns a memoized function
 

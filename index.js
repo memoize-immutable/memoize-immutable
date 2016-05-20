@@ -36,14 +36,17 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
       new WeakMap() :
       new Map()
     );
+    var displayNameSuffix = options && options.displayNameSuffix || 'Memoized';
 
     // The following two options only help with testing
     var idMap = options && options._idMap || _idMap;
     var id = options && options._id || _id;
 
+    var memoized;
+
     // fast path for single non-primitive arguments
     if ( useOneObjArg ) {
-      return function(args) {
+      memoized = function(args) {
         if ( !cache.has(args) ) {
           var result = fn.call(this, args);
           cache.set( args, result );
@@ -55,8 +58,8 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
 
     // useNamedArgs path doesn't access the arguments object, which allows v8
     // to optimize it
-    if ( useNamedArgs ) {
-      return function(args) {
+    else if ( useNamedArgs ) {
+      memoized = function(args) {
         // when using named args, they need to be sorted alphabetically to
         // make sure we build the cache key the same way every time.
         var argNames = Object.keys(args).sort();
@@ -101,44 +104,49 @@ if ( typeof WeakMap === 'undefined' || typeof Map === 'undefined' ) {
     }
 
     // default path
-    return function() {
-      var length = arguments.length;
-      var aKey = [];
-      for ( var i = 0; i < length; i++ ) {
-        var arg = arguments[i];
-        var argType = typeof arg;
+    else {
+      memoized = function() {
+        var length = arguments.length;
+        var aKey = [];
+        for ( var i = 0; i < length; i++ ) {
+          var arg = arguments[i];
+          var argType = typeof arg;
 
-        // if the argument is not a primitive, get a unique (memoized?) id for it
-        if (
-          // typeof null is "object", although we'll consider it as a primitive
-          arg !== null &&
-          ( argType === 'object' || argType === 'function' || argType === 'symbol' )
-        ) {
-          if ( !idMap.has(arg) ) {
-            idMap.set(arg, id.id++);
+          // if the argument is not a primitive, get a unique (memoized?) id for it
+          if (
+            // typeof null is "object", although we'll consider it as a primitive
+            arg !== null &&
+            ( argType === 'object' || argType === 'function' || argType === 'symbol' )
+          ) {
+            if ( !idMap.has(arg) ) {
+              idMap.set(arg, id.id++);
+            }
+            aKey.push( idMap.get(arg) );
+
+          // otherwise, add the argument and its type to the aKey
+          } else {
+            aKey.push( arg == null ?
+              '' + arg :
+              argType + '(' + arg + ')'
+            );
           }
-          aKey.push( idMap.get(arg) );
-
-        // otherwise, add the argument and its type to the aKey
-        } else {
-          aKey.push( arg == null ?
-            '' + arg :
-            argType + '(' + arg + ')'
-          );
         }
-      }
 
-      // concatenate serialized arguments using a complex separator
-      // (to avoid key collisions)
-      var sKey = aKey.join('/<[MI_SEP]>/');
+        // concatenate serialized arguments using a complex separator
+        // (to avoid key collisions)
+        var sKey = aKey.join('/<[MI_SEP]>/');
 
-      if ( !cache.has(sKey) ) {
-        var result = fn.apply(this, arguments);
-        cache.set( sKey, result );
-        return result;
-      }
+        if ( !cache.has(sKey) ) {
+          var result = fn.apply(this, arguments);
+          cache.set( sKey, result );
+          return result;
+        }
 
-      return cache.get( sKey );
-    };
+        return cache.get( sKey );
+      };
+    }
+
+    memoized.displayName = fn.name + displayNameSuffix;
+    return memoized;
   };
 }));
