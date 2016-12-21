@@ -28,14 +28,15 @@ function unoptimizable () {
 check('memoize', function() { memoize(function () {}) }, true);
 check('add', foo, true);
 check('unoptimizable', unoptimizable, false);
+// All following tests are repeated twice, because V8 doesn't really optimize before second time
 check('memoized with TupleMap cache', memoize(foo, { cache: new TupleMap() }), false);
-check('memoized with TupleMap cache', memoize(foo, { cache: new TupleMap() }), false);
-check('memoized with WeakTupleMap cache', memoize(foo, { cache: new WeakTupleMap() }), false);
-check('memoized with WeakTupleMap cache', memoize(foo, { cache: new WeakTupleMap() }), false);
+check('memoized with TupleMap cache', memoize(foo, { cache: new TupleMap() }), true);
+check('memoized with WeakTupleMap cache', memoize(foo, { cache: new WeakTupleMap() }), true);
+check('memoized with WeakTupleMap cache', memoize(foo, { cache: new WeakTupleMap() }), true);
 check('memoized with MixedTupleMap cache', memoize(foo, { cache: new MixedTupleMap() }), false);
-check('memoized with MixedTupleMap cache', memoize(foo, { cache: new MixedTupleMap() }), false);
-check('memoized with NamedTupleMap cache', memoize(foo, { cache: new NamedTupleMap() }), false);
-check('memoized with NamedTupleMap cache', memoize(foo, { cache: new NamedTupleMap() }), false);
+check('memoized with MixedTupleMap cache', memoize(foo, { cache: new MixedTupleMap() }), true);
+check('memoized with NamedTupleMap cache', memoize(foo, { cache: new NamedTupleMap() }), true);
+check('memoized with NamedTupleMap cache', memoize(foo, { cache: new NamedTupleMap() }), true);
 check('memoized with Map cache', memoize(foo, { cache: new Map() }), true);
 check('memoized with Map cache', memoize(foo, { cache: new Map() }), true);
 check('memoized with WeakMap cache', memoize(foo, { cache: new WeakMap() }), true);
@@ -65,7 +66,7 @@ function check(label, fn, expectOptimized) {
   // Tag function for optimization
   %OptimizeFunctionOnNextCall(fn);
 
-  // 2 calls are needed to go from uninitialized -> pre-monomorphic -> monomorphic
+  // Another call is needed to go from uninitialized -> pre-monomorphic -> monomorphic
   fn({a: 1, b: {b: 2}}, {c: 3});
 
   // Check/verify it (of not have code that cant be optimised)
