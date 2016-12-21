@@ -19,9 +19,6 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Dist files
-dist/
-
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
