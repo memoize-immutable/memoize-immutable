@@ -2,8 +2,7 @@
 
 An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
 
-This lib is only compatible with browsers that implement `WeakMap` and `Map` natively.
-(which have [good browser support](https://kangax.github.io/compat-table/es6/#test-Map)).
+This lib is only compatible with browsers and environments that implement `WeakMap` and `Map` natively (see [compatibility table](https://kangax.github.io/compat-table/es6/#test-WeakMap)).
 
 ## How is it different from other memoizers?
 
@@ -15,13 +14,17 @@ This memoizer is designed to work with such caches.
 
     npm install --save memoize-immutable
 
+Optionally, you can install alternative caches to be used with this memoizer:
+
+    npm install --save namedtuplemap weaktuplemap mixedtuplemap lrumap
+
 ## API
 
     memoize( fn [, options ] )
 
 - `fn`: the function to memoize
 - `options` (optionnal):
-  - `cache`: a cache instance implementing `.has`, `.get` and `.set` methods (defaults to TupleMap)
+  - `cache`: a cache **instance** implementing `.has`, `.get` and `.set` methods (defaults to TupleMap)
   - `limit`: limit the size of the default cache (incompatible with `cache` option)
 
 `return`s a memoized function.
@@ -79,16 +82,16 @@ The following instructions will help choose optimal cache store for a given func
   1. The function accepts a single non-primitive argument.
      → use a native WeakMap.
   2. The function accepts a single primitive argument.
-     → use the LRUMap (or a native Map if its size isn't a problem).
+     → use the [LRUMap](/memoize-immutable/LRUMap) (or a native Map if its size isn't a problem).
 2. The function accepts multiple arguments, but the number of arguments never changes
   1. The function accepts primitive arguments, **always mixed with at least one non-primitive argument**
-     → use the MixedTupleMap.
+     → use the [MixedTupleMap](/memoize-immutable/MixedTupleMap).
   2. The function only accepts non-primitive arguments.
-     → use the WeakTupleMap.
+     → use the [WeakTupleMap](/memoize-immutable/WeakTupleMap).
 3. The function accepts a single object of named arguments
-  → use the NamedTupleMap.
+  → use the [NamedTupleMap](/memoize-immutable/NamedTupleMap).
 4. **In any other case**
-   → use the default TupleMap.
+   → use the default [TupleMap](/memoize-immutable/TupleMap).
 
 ## license
 
