@@ -82,16 +82,16 @@ The following instructions will help choose optimal cache store for a given func
   1. The function accepts a single non-primitive argument.
      → use a native WeakMap.
   2. The function accepts a single primitive argument.
-     → use the [LRUMap](/memoize-immutable/LRUMap) (or a native Map if its size isn't a problem).
+     → use the [LRUMap](https://github.com/memoize-immutable/LRUMap) (or a native Map if its size isn't a problem).
 2. The function accepts multiple arguments, but the number of arguments never changes
   1. The function accepts primitive arguments, **always mixed with at least one non-primitive argument**
-     → use the [MixedTupleMap](/memoize-immutable/MixedTupleMap).
+     → use the [MixedTupleMap](https://github.com/memoize-immutable/MixedTupleMap).
   2. The function only accepts non-primitive arguments.
-     → use the [WeakTupleMap](/memoize-immutable/WeakTupleMap).
+     → use the [WeakTupleMap](https://github.com/memoize-immutable/WeakTupleMap).
 3. The function accepts a single object of named arguments
-  → use the [NamedTupleMap](/memoize-immutable/NamedTupleMap).
+  → use the [NamedTupleMap](https://github.com/memoize-immutable/NamedTupleMap).
 4. **In any other case**
-   → use the default [TupleMap](/memoize-immutable/TupleMap).
+   → use the default [TupleMap](https://github.com/memoize-immutable/TupleMap).
 
 ## license
 
