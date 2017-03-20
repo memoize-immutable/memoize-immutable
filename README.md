@@ -1,6 +1,6 @@
 # Memoize Immutable [![npm version](https://badge.fury.io/js/memoize-immutable.svg)](https://badge.fury.io/js/memoize-immutable) [![Build Status](https://travis-ci.org/memoize-immutable/memoize-immutable.svg?branch=master)](https://travis-ci.org/memoize-immutable/memoize-immutable) [![Dependency Status](https://david-dm.org/memoize-immutable/memoize-immutable.svg)](https://david-dm.org/memoize-immutable/memoize-immutable) [![Coverage Status](https://coveralls.io/repos/github/memoize-immutable/memoize-immutable/badge.svg?branch=master)](https://coveralls.io/github/memoize-immutable/memoize-immutable?branch=master)
 
-An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments.
+An efficient memoizer for functions that only receive immutable arguments. Ideal for Redux and similar environments, works with [Immutable.js](https://facebook.github.io/immutable-js/) values.
 
 This lib is only compatible with browsers and environments that implement `WeakMap` and `Map` natively (see [compatibility table](https://kangax.github.io/compat-table/es6/#test-WeakMap)).
 
@@ -64,7 +64,7 @@ expect(arraySumMemoized(clone)).to.equal(28);
 expect(nbExecs).to.equal(2);
 ```
 
-## Choosing a cache store
+## Choosing a cache store
 
 NB: When in doubt, don't use an optional cache.
 
@@ -93,7 +93,7 @@ The following instructions will help choose optimal cache store for a given func
 4. **In any other case**
    → use the default [TupleMap](https://github.com/memoize-immutable/TupleMap).
 
-## license
+## License
 
 MPL-2.0
 
