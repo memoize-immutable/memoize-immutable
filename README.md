@@ -23,7 +23,7 @@ Optionally, you can install alternative caches to be used with this memoizer:
     memoize( fn [, options ] )
 
 - `fn`: the function to memoize
-- `options` (optionnal):
+- `options` (optional):
   - `cache`: a cache **instance** implementing `.has`, `.get` and `.set` methods (defaults to TupleMap)
   - `limit`: limit the size of the default cache (incompatible with `cache` option)
 
